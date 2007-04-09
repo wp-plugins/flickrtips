@@ -15,7 +15,7 @@ The panel disappears when the mouse leaves the link.
 
 This behaviour is disabled for links that contain images, since it would probably be redundant.
 
-Verified on WinIE 6-7, Safari, and Firefox 2.
+Verified on Windows IE 6-7, Safari 2, Firefox 2, and Opera 9.
 
 == Installation ==
 

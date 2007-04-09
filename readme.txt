@@ -30,5 +30,5 @@ I plan to implement that soon.
 
 == Screenshots ==
 
-1. Hover in action (screenshot-1.png)
+1. Hover in action
 

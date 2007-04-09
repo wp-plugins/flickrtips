@@ -1,7 +1,7 @@
 === FlickrTips ===
 Contributors: chrissam42
 Tags: flickr, photo, ajax, link
-Requires at least: 2.0
+Requires at least: 1.5
 Tested up to: 2.1.1
 Stable tag: 1.0
 
@@ -17,7 +17,7 @@ This behaviour is disabled for links that contain images, since it would probabl
 
 == Installation ==
 
-1. unpack `flickrtips.zip` into the `/wp-content/plugins/` directory.  This should create a `flickrtips` directory.
+1. unpack and upload `flickrtips` directory into the `/wp-content/plugins/` directory.
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 That's all there is to it!  No modifications to your WordPress templates are needed.

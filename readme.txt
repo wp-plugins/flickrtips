@@ -15,6 +15,8 @@ The panel disappears when the mouse leaves the link.
 
 This behaviour is disabled for links that contain images, since it would probably be redundant.
 
+Verified on WinIE 6-7, Safari, and Firefox 2.
+
 == Installation ==
 
 1. unpack and upload `flickrtips` directory into the `/wp-content/plugins/` directory.

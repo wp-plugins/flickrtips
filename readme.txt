@@ -5,7 +5,7 @@ Requires at least: 1.5
 Tested up to: 2.1.1
 Stable tag: 1.0
 
-Displays popup photo thumbnails on mouseover of links Flickr photo pages.
+Displays popup photo thumbnails on mouseover of links to Flickr photo pages.
 
 == Description ==
 

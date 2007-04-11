@@ -3,7 +3,7 @@ Contributors: chrissam42
 Tags: flickr, image, images, photo, photos, ajax, link, links
 Requires at least: 1.5
 Tested up to: 2.1.1
-Stable tag: 1.1
+Stable tag: 1.1.1
 
 Displays popup photo thumbnails on mouseover of links to Flickr photo pages.
 
@@ -17,12 +17,13 @@ The panel disappears when the mouse leaves the link.
 
 This behaviour is disabled for links that contain images, since it would probably be redundant.
 
-Verified browser support (others may work too; untested)
- * Windows IE 6+
- * Firefox 1+
- * Safari 2
- * Opera 8+
- * OmniWeb 5+
+Verified browser support: (others may work too; untested)
+
+* Windows IE 6+
+* Firefox 1+
+* Safari 2
+* Opera 8+
+* OmniWeb 5+
 
 == Installation ==
 

@@ -1,18 +1,63 @@
 <?php
 
-$apikey = "ddba2415a69be40c65f15fffc5cbbfab";
-$secret = "6a223007822ca801";
+function flickrRequest($method,$params)
+{
+	static $apikey = "ddba2415a69be40c65f15fffc5cbbfab";
+	static $secret = "6a223007822ca801";
 
-$fotoid = $_REQUEST['id'];
+	$req = "http://api.flickr.com/services/rest/?format=php_serial&api_key=$apikey&method=" . urlencode($method);
 
-if (!$fotoid) exit;
+	if (is_array($params)) foreach ($params as $k => $v)
+		$req .= "&" . urlencode($k) . "=" . urlencode($v);
 
-$result = unserialize(file_get_contents("http://api.flickr.com/services/rest/?method=flickr.photos.getInfo&api_key=$apikey&photo_id=$fotoid&format=php_serial"));
+	return @unserialize(file_get_contents($req));
+}
 
-if (!is_array($result['photo'])) exit;
+function flickrURL($p,$size='m')
+{
+	return "http://farm{$p['farm']}.static.flickr.com/{$p['server']}/{$p['id']}_{$p['secret']}_{$size}.jpg";
+}
 
-$p = $result['photo'];
+$id = $_REQUEST['id'];
+$max = (int)$_REQUEST['max'];  if (!$max) $max = 6;
 
-die("http://static.flickr.com/{$p['server']}/{$p['id']}_{$p['secret']}_m.jpg");
+if (!$id) die('no id');
+
+switch ($_REQUEST['type'])
+{
+	case "collection": case "collections":
+		echo "collection\n";
+		break;
+	
+	case "set": case "sets":
+		$result = flickrRequest('flickr.photosets.getPhotos',array('photoset_id'=>$id));
+
+		if (!is_array($result['photoset']['photo'])) die('bad result');
+
+		shuffle($result['photoset']['photo']);
+
+		$i = 0;
+		foreach ($result['photoset']['photo'] as $p)
+		{
+			if (++$i > $max) break;
+			print flickrURL($p,"s") . "\n";
+		}
+
+		break;
+	
+	case "photo": case "photos": default:
+	
+		$result = flickrRequest("flickr.photos.getInfo",array('photo_id'=>$id));
+	
+		if (!is_array($result)) die('bad result');
+		if (!is_array($result['photo'])) die('no photo result');
+	
+		$p = $result['photo'];
+	
+		print flickrURL($p,'m') . "\n";
+		break;
+}
+
+exit;
 
 ?>

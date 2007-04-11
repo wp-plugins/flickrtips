@@ -1,0 +1,15 @@
+== 1.1 released 2007-04-11 ==
+
+ * added photoset support
+ * highlight flickr links with pink dotted underline
+
+== 1.0 released 2007-04-09 ==
+
+ * Verified browser support (others may work too; untested)
+   * Windows IE 6+
+   * Firefox 1+
+   * Safari 2
+   * Opera 8+
+   * OmniWeb 5+
+
+ * Individual Flickr photo page links only: http://flickr.com/photos/<user_id>/<photo_id>/

@@ -1,21 +1,28 @@
 === FlickrTips ===
 Contributors: chrissam42
-Tags: flickr, photo, ajax, link
+Tags: flickr, image, images, photo, photos, ajax, link, links
 Requires at least: 1.5
 Tested up to: 2.1.1
-Stable tag: 1.0
+Stable tag: 1.1
 
 Displays popup photo thumbnails on mouseover of links to Flickr photo pages.
 
 == Description ==
 
-FlickrTips is a simple AJAX enhancement to hyperlinks within a Wordpress blog.  When a link to a Flickr photo page
-is moused over by the user, a small panel will appear near the mouse cursor with a thumbnail of the Flickr image.
+FlickrTips is a simple AJAX enhancement to hyperlinks within a Wordpress blog.
+When the user mouses over a link to a Flickr photo page or photoset,
+a small floating panel will appear near the mouse cursor with a thumbnail of the Flickr image.
+A grid of thumbnails is shown for photosets.
 The panel disappears when the mouse leaves the link.
 
 This behaviour is disabled for links that contain images, since it would probably be redundant.
 
-Verified on Windows IE 6-7, Safari 2, Firefox 2, and Opera 9.
+Verified browser support (others may work too; untested)
+ * Windows IE 6+
+ * Firefox 1+
+ * Safari 2
+ * Opera 8+
+ * OmniWeb 5+
 
 == Installation ==
 
@@ -26,11 +33,8 @@ That's all there is to it!  No modifications to your WordPress templates are nee
 
 == Frequently Asked Questions ==
 
-= What about other types of Flickr links (e.g. sets, collections)? =
-
-I plan to implement that soon.
-
 == Screenshots ==
 
-1. Hover in action
+1. Individual photo link
+2. Photoset link
 

@@ -17,12 +17,13 @@ The panel disappears when the mouse leaves the link.
 
 This behaviour is disabled for links that contain images, since it would probably be redundant.
 
-Verified browser support (others may work too; untested)
- * Windows IE 6+
- * Firefox 1+
- * Safari 2
- * Opera 8+
- * OmniWeb 5+
+Verified browser support: (others may work too; untested)
+
+* Windows IE 6+
+* Firefox 1+
+* Safari 2
+* Opera 8+
+* OmniWeb 5+
 
 == Installation ==
 

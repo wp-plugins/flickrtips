@@ -63,6 +63,10 @@ var flickrTips = {
 			this.fotoImgArray[z].id = "flickrTipsFoto" + z;
 			this.fotoImgArray[z].src = "";
 			this.fotoImgArray[z].alt = "";
+
+			if (x) this.fotoImgArray[z].style.borderLeft="1px solid white";
+			if (y) this.fotoImgArray[z].style.borderTop="1px solid white";
+
 			++z;
 		}
 

@@ -1,7 +1,6 @@
 
 var flickrTips = {
 	fotoDiv: null,
-	fotoImg: new Array,
 	tilesX: 3,
 	tilesY: 2,
 	flickrRE: new RegExp("http://(www\\.)?flickr\\.com/photos/([^/]+)/(sets|\\d+)(/([^/]+))?"),
@@ -46,20 +45,8 @@ var flickrTips = {
 		this.fotoDiv.style.padding= "3px";
 		this.fotoDiv.style.backgroundColor= "white";
 
-		var z=0;
-		for (var y=0; y < this.tilesY; y++)
-		for (var x=0; x < this.tilesX; x++)
-		{
-			this.fotoImg[z] = document.createElement("img");
-			this.fotoImg[z].id = "flickrTipsFoto" + z;
-			this.fotoImg[z].src = "";
-			this.fotoImg[z].alt = "";
-
-			if (x) this.fotoImg[z].style.borderLeft="1px solid white";
-			if (y) this.fotoImg[z].style.borderTop="1px solid white";
-
-			++z;
-		}
+		this.fotos['spinner'] = document.createElement("img");
+		this.fotos['spinner'].src = flickrTips.blogurl + "/wp-content/plugins/flickrtips/spinnywheel.gif";
 
 		document.body.appendChild(this.fotoDiv);
 
@@ -74,12 +61,21 @@ var flickrTips = {
 
 		var result = new Array;
 
-		for (var i=0; i<temp.length; i++)
+		var i=0;
+		for (var y=0; y < flickrTips.tilesY; y++)
+		for (var x=0; x < flickrTips.tilesX; x++)
 		{
 			if (temp[i].substr(0,4) != 'http')
 				continue;
 
-			result[result.length] = temp[i];
+			var j = result.length;
+
+			result[j] = document.createElement("img");
+			result[j].src = temp[i];
+			if (x) result[j].style.borderLeft = "1px solid white";
+			if (y) result[j].style.borderTop = "1px solid white";
+
+			if (++i >= temp.length) break;
 		}
 
 		flickrTips.fotos[key] = result;
@@ -126,8 +122,7 @@ var flickrTips = {
 
 		if (!flickrTips.fotos[fotoPage])
 		{
-			flickrTips.fotoImg[0].src = flickrTips.blogurl + "/wp-content/plugins/flickrtips/spinnywheel.gif";
-			flickrTips.fotoDiv.appendChild(flickrTips.fotoImg[0]);
+			flickrTips.fotoDiv.appendChild(flickrTips.fotos['spinner']);
 
 			var matches = flickrTips.flickrRE.exec(fotoPage);
 		
@@ -159,8 +154,8 @@ var flickrTips = {
 			var f = flickrTips.fotos[fotoPage];
 			for (var i=0; i < f.length; i++)
 			{
-				flickrTips.fotoImg[i].src = f[i];
-				flickrTips.fotoDiv.appendChild(flickrTips.fotoImg[i]);
+				//flickrTips.fotoImg[i] = f[i];
+				flickrTips.fotoDiv.appendChild(f[i]);
 				if (i % flickrTips.tilesX == flickrTips.tilesX - 1)
 					flickrTips.fotoDiv.appendChild(document.createElement('br'));
 			}

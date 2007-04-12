@@ -1,3 +1,14 @@
+== 1.1.2 released 2007-04-12 ==
+
+ * improved inconsistent display in Windows IE
+ * improved image object caching
+
+== 1.1.1 released 2007-04-11 ==
+
+ * bugfix: spinny-wheel "wait" graphic was not being loaded
+ * bugfix: disabled misleading underlining of collection links (Flickr API does not support collections yet)
+ * added 1-pixel separation between photoset tiles
+
 == 1.1 released 2007-04-11 ==
 
  * added photoset support

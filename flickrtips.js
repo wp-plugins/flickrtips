@@ -171,8 +171,11 @@ var flickrTips = {
 };
 
 function flickrTips_updateBodyOnLoad() {
-	if (typeof window.onload == "Function")
-		window.onload = function() { window.onload(); flickrTips.init(); };
+	if (typeof window.onload == "function")
+	{
+		var temp = window.onload;
+		window.onload = function() { temp(); flickrTips.init(); };
+	}
 	else
 		window.onload = function() { flickrTips.init(); };
 };

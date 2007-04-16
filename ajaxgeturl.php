@@ -30,6 +30,7 @@ switch ($_REQUEST['type'])
 		break;
 	
 	case "set": case "sets":
+
 		$result = flickrRequest('flickr.photosets.getPhotos',array('photoset_id'=>$id));
 
 		if (!is_array($result['photoset']['photo'])) die('bad result');
@@ -38,6 +39,42 @@ switch ($_REQUEST['type'])
 
 		$i = 0;
 		foreach ($result['photoset']['photo'] as $p)
+		{
+			if (++$i > $max) break;
+			print flickrURL($p,"s") . "\n";
+		}
+
+		break;
+
+	case "tag": case "tags":
+
+		#cache Flickr user IDs to avoid slow lookup
+		$u = $_REQUEST['user'];
+
+		$c = @unserialize($_COOKIE['flickrTips_userhash']);
+		if (!is_array($c)) $c = array();
+
+		if (!empty($c[$u])) $u = $c[$u];
+		else
+		{
+			$temp = flickrRequest('flickr.urls.lookupUser',array('url' => "http://flickr.com/photos/$u"));
+
+			if (empty($temp['user']['id']))
+				die("Error looking up Flickr user ID.");
+
+			$u = $c[$_REQUEST['user']] = $temp['user']['id'];
+
+			setcookie('flickrTips_userhash',serialize($c),null,'/');
+		}
+
+		$result = flickrRequest('flickr.photos.search',array('user_id' => $u, 'tags' => $id));
+
+		if (!is_array($result['photos']['photo'])) die('bad result');
+
+		shuffle($result['photos']['photo']);
+
+		$i = 0;
+		foreach ($result['photos']['photo'] as $p)
 		{
 			if (++$i > $max) break;
 			print flickrURL($p,"s") . "\n";

@@ -38,7 +38,7 @@ function flickrTips_script_tag()
 
 function flickrTips_update_body_onload()
 {
-	print "<script type='text/javascript'>\nflickrTips_updateBodyOnLoad();\n</script>\n";
+	print "<script type='text/javascript'>\nflickrTips.addLoadEvent();\n</script>\n";
 }
 
 add_action('wp_head','flickrTips_script_tag');

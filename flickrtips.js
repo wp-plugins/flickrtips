@@ -3,9 +3,19 @@ var flickrTips = {
 	fotoDiv: null,
 	tilesX: 3,
 	tilesY: 2,
-	flickrRE: new RegExp("http://(www\\.)?flickr\\.com/photos/([^/]+)/(sets|\\d+)(/([^/]+))?"),
+	flickrRE: new RegExp("http://(www\\.)?flickr\\.com/photos/([^/]+)/(sets|tags|\\d+)(/([^/]+))?"),
 	xmlhttp: null,
 	fotos: new Object,
+
+	addLoadEvent: function() {
+		if (typeof window.onload == "function")
+		{
+			var temp = window.onload;
+			window.onload = function() { temp(); flickrTips.init(); };
+		}
+		else
+			window.onload = function() { flickrTips.init(); };
+	},
 
 	processPageLinks: function() {
 		var alist = document.getElementsByTagName("a");
@@ -130,7 +140,7 @@ var flickrTips = {
 			var fotoID, type;
 			
 			switch(matches[3]) {
-				case "sets":  case "collections":
+				case "sets":  case "collections":  case "tags":
 					type=matches[3];
 					fotoID=matches[5];
 					break;
@@ -141,8 +151,21 @@ var flickrTips = {
 					break;
 			}
 
+			var flickrReq = {
+				max: flickrTips.tilesX*flickrTips.tilesY,
+				type: type,
+				id: fotoID,
+				user: userID
+			};
+
+			var flickrURL = flickrTips.blogurl + "/wp-content/plugins/flickrtips/ajaxgeturl.php?asdf=qwer";
+			for (var i in flickrReq)
+			{
+				flickrURL += "&" + i + "=" + encodeURIComponent(flickrReq[i]);
+			}
+
 			flickrTips.xmlhttp.abort();
-			flickrTips.xmlhttp.open("GET",flickrTips.blogurl + "/wp-content/plugins/flickrtips/ajaxgeturl.php?max=" + (flickrTips.tilesX*flickrTips.tilesY) + "&type=" + type + "&id=" + fotoID);
+			flickrTips.xmlhttp.open("GET",flickrURL);
 			flickrTips.xmlhttp.onreadystatechange=function() { flickrTips.flickrResponse(e,fotoPage); };
 			flickrTips.xmlhttp.send("");
 
@@ -170,10 +193,5 @@ var flickrTips = {
 
 };
 
-function flickrTips_updateBodyOnLoad() {
-	if (typeof window.onload == "Function")
-		window.onload = function() { window.onload(); flickrTips.init(); };
-	else
-		window.onload = function() { flickrTips.init(); };
-};
+
 

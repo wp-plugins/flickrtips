@@ -3,7 +3,7 @@
 Plugin Name: FlickrTips
 Plugin URI: 
 Description: Shows popup thumbnails of Flickr images on mouseover of links to Flickr
-Version: 1.3
+Version: devel
 Author: Chris Lewis
 Author URI: http://www.nomadicsiren.org/japan/
 */
@@ -30,7 +30,7 @@ function flickrTips_script_tag()
   	$blogurl = get_bloginfo('url');
 	$blogurl = preg_replace("|^http://.*?/|","/",$blogurl);
 
-	$ftpath = "$blogurl/wp-content/plugins/flickrtips.unstable";
+	$ftpath = "$blogurl/wp-content/plugins/flickrtips";
 
   	print "<script type='text/javascript' src='$ftpath/flickrtips.js'></script>\n";
 	print "<script type='text/javascript'>\nflickrTips.blogurl='$blogurl';\n</script>\n";

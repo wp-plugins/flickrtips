@@ -2,8 +2,8 @@
 Contributors: chrissam42
 Tags: flickr, image, images, photo, photos, ajax, link, links
 Requires at least: 1.5
-Tested up to: 2.1.1
-Stable tag: 1.2
+Tested up to: 2.2
+Stable tag: 1.2.1
 
 Displays popup photo thumbnails on mouseover of links to Flickr photo pages.
 
@@ -33,6 +33,10 @@ Verified browser support: (others may work too; untested)
 That's all there is to it!  No modifications to your WordPress templates are needed.
 
 == Frequently Asked Questions ==
+
+= What about Collections? =
+
+Collections aren't yet implemented in the Flickr API.  Should be soon!
 
 == Screenshots ==
 

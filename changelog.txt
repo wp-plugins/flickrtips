@@ -1,3 +1,8 @@
+== 1.2.1 released 2007-09-02 ==
+
+ * fixed bug with non-English characters in Flickr tags
+ * fixed wrong version number in WordPress repository
+
 == 1.2 released 2007-04-16 ==
 
  * added tags URL support: http://flickr.com/<user>/tags/<tag>/

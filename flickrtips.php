@@ -30,7 +30,7 @@ function flickrTips_script_tag()
   	$blogurl = get_bloginfo('url');
 	$blogurl = preg_replace("|^http://.*?/|","/",$blogurl);
 
-	$ftpath = "$blogurl/wp-content/plugins/flickrtips.unstable";
+	$ftpath = "$blogurl/wp-content/plugins/flickrtips";
 
   	print "<script type='text/javascript' src='$ftpath/flickrtips.js'></script>\n";
 	print "<script type='text/javascript'>\nflickrTips.blogurl='$blogurl';\n</script>\n";

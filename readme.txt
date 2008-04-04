@@ -2,8 +2,8 @@
 Contributors: chrissam42
 Tags: flickr, image, images, photo, photos, ajax, link, links
 Requires at least: 1.5
-Tested up to: 2.3
-Stable tag: 1.3.1
+Tested up to: 2.5
+Stable tag: 1.3.2
 
 Displays popup photo thumbnails on mouseover of links to images and Flickr photo pages.
 

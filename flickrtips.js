@@ -3,7 +3,9 @@ var flickrTips = {
 	fotoDiv: null,
 	tilesX: 3,
 	tilesY: 2,
+	intervals: {},
 	flickrRE: new RegExp("http://(www\\.)?flickr\\.com/photos/([^/]+)/(sets|tags|\\d+)(/([^/]+))?"),
+	plainImageRE: /\.(jpg|gif|png)(\?.*)?$/i,
 	xmlhttp: null,
 	fotos: new Object,
 
@@ -25,11 +27,19 @@ var flickrTips = {
 		{
 			var a = alist[i];
 
-			if (!this.flickrRE.test(a.href)) continue;
+			var isFlickr=this.flickrRE.test(a.href);
+			var isPlain=this.plainImageRE.test(a.href);
+
+			if (!isFlickr && !isPlain) continue;
+
 			if (a.getElementsByTagName("img").length) continue;
 
+			var linecolor = "";
+			if (isFlickr) linecolor = "ff0084";
+			else if (isPlain) linecolor = "0000ff";
+
 			a.style.textDecoration="none";
-			a.style.borderBottom = "1px dotted #ff0084";
+			a.style.borderBottom = "1px dotted #" + linecolor;
 			a.onmouseover = this.show;			
 			a.onmouseout = this.hide;
 			a.onmousemove = this.move;
@@ -63,6 +73,105 @@ var flickrTips = {
 		this.processPageLinks();
 	},
 	
+	loadScaledImage: function() {
+
+		if (typeof this.width == 'undefined')
+		{
+			if (flickrTips.intervals[this.src])
+			{
+				window.clearInterval(flickrTips.intervals[this.src]);
+				flickrTips.intervals[this.src] = null;
+			}
+
+			return;
+		}
+
+		var w = this.width;
+		var h = this.height;
+
+		if (!w || !h) return;
+
+		while (w > 256 || h > 256)
+		{
+			w /= 2;
+			h /= 2;
+		}
+
+		this.style.width = w + "px";
+		this.style.height = h + "px";
+
+		flickrTips.fotos[this.src] = new Array(this);
+
+		if (flickrTips.intervals[this.src])
+		{
+			window.clearInterval(flickrTips.intervals[this.src])
+			flickrTips.intervals[this.src] = null;
+		}
+
+		if (flickrTips.fotoDiv.style.visibility != "hidden") flickrTips.show(null,this.src);
+
+	},
+	
+	loadPlainImage: function(e,fotoPage) {
+
+		var temp = document.createElement('img');
+		temp.src = fotoPage;
+		temp.loadScaled = flickrTips.loadScaledImage;
+
+		//scale image when it's loaded.  unfortunately different browsers calculate load status differently
+
+		if (flickrTips.intervals[fotoPage]) return;
+
+		flickrTips.intervals[fotoPage] = window.setInterval(function() { temp.loadScaled(); }, 250);
+
+	},
+	
+	flickrRequest: function(e,fotoPage) {
+
+		var matches = flickrTips.flickrRE.exec(fotoPage);
+	
+		var userID=matches[2];
+		var fotoID, type;
+		
+		switch(matches[3]) {
+			case "sets":  case "collections":  case "tags":
+				type=matches[3];
+				fotoID=matches[5];
+				break;
+
+			default:
+				type='photos';
+				fotoID=matches[3];
+				break;
+		}
+
+		var flickrReq = {
+			max: flickrTips.tilesX*flickrTips.tilesY,
+			type: type,
+			id: fotoID,
+			user: userID
+		};
+
+
+		var flickrPost = "";
+		var first=true;
+		for (var i in flickrReq)
+		{
+			if (first) first = false;
+			else flickrPost += "&";
+			
+			flickrPost += i + "=" + encodeURIComponent(flickrReq[i]);
+		}
+
+		flickrTips.xmlhttp.abort();
+		flickrTips.xmlhttp.open("GET",flickrTips.blogurl + "/wp-content/plugins/flickrtips/ajaxgeturl.php?" + flickrPost);
+		//flickrTips.xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded; charset=UTF-8");
+		flickrTips.xmlhttp.onreadystatechange=function() { flickrTips.flickrResponse(e,fotoPage); };
+		flickrTips.xmlhttp.send(flickrPost);
+
+		return;
+	},
+	
 	flickrResponse: function(e,key) {
 
 		if (this.xmlhttp.readyState != 4) return;
@@ -89,7 +198,7 @@ var flickrTips = {
 		}
 
 		flickrTips.fotos[key] = result;
-		
+
 		if (flickrTips.fotoDiv.style.visibility != "hidden") flickrTips.show(e,key);
 		
 	},
@@ -120,7 +229,7 @@ var flickrTips = {
 	
 	show: function(e,fotoPage) {
 
-		if (!e) var e = window.event;
+		if (!e && window.event) e = window.event;
 
 		if (!fotoPage && !this.href) return;
 		if (!fotoPage) fotoPage=this.href;	
@@ -130,46 +239,12 @@ var flickrTips = {
 
 		flickrTips.fotoDiv.style.visibility='visible';
 
-		if (!flickrTips.fotos[fotoPage])
+		if (typeof flickrTips.fotos[fotoPage] == 'undefined' || !flickrTips.fotos[fotoPage])
 		{
 			flickrTips.fotoDiv.appendChild(flickrTips.fotos['spinner']);
 
-			var matches = flickrTips.flickrRE.exec(fotoPage);
-		
-			var userID=matches[2];
-			var fotoID, type;
-			
-			switch(matches[3]) {
-				case "sets":  case "collections":  case "tags":
-					type=matches[3];
-					fotoID=matches[5];
-					break;
-
-				default:
-					type='photos';
-					fotoID=matches[3];
-					break;
-			}
-
-			var flickrReq = {
-				max: flickrTips.tilesX*flickrTips.tilesY,
-				type: type,
-				id: fotoID,
-				user: userID
-			};
-
-			var flickrURL = flickrTips.blogurl + "/wp-content/plugins/flickrtips/ajaxgeturl.php?asdf=qwer";
-			for (var i in flickrReq)
-			{
-				flickrURL += "&" + i + "=" + encodeURIComponent(flickrReq[i]);
-			}
-
-			flickrTips.xmlhttp.abort();
-			flickrTips.xmlhttp.open("GET",flickrURL);
-			flickrTips.xmlhttp.onreadystatechange=function() { flickrTips.flickrResponse(e,fotoPage); };
-			flickrTips.xmlhttp.send("");
-
-			return;
+			if (flickrTips.flickrRE.test(fotoPage)) return flickrTips.flickrRequest(e,fotoPage);
+			if (flickrTips.plainImageRE.test(fotoPage)) return flickrTips.loadPlainImage(e,fotoPage);
 		}
 
 		if (typeof flickrTips.fotos[fotoPage] == "object" && flickrTips.fotos[fotoPage].length)

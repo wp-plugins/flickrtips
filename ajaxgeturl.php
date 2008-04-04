@@ -18,7 +18,7 @@ function flickrURL($p,$size='m')
 	return "http://farm{$p['farm']}.static.flickr.com/{$p['server']}/{$p['id']}_{$p['secret']}_{$size}.jpg";
 }
 
-$id = $_REQUEST['id'];
+$id = urldecode($_REQUEST['id']); // this takes care of high-byte chars
 $max = (int)$_REQUEST['max'];  if (!$max) $max = 6;
 
 if (!$id) die('no id');

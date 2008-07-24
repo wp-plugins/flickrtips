@@ -66,7 +66,7 @@ var flickrTips = {
 		this.fotoDiv.style.backgroundColor= "white";
 
 		this.fotos['spinner'] = document.createElement("img");
-		this.fotos['spinner'].src = flickrTips.blogurl + "/wp-content/plugins/flickrtips/spinnywheel.gif";
+		this.fotos['spinner'].src = flickrTips.wpurl + "/wp-content/plugins/flickrtips/spinnywheel.gif";
 
 		document.body.appendChild(this.fotoDiv);
 
@@ -164,7 +164,7 @@ var flickrTips = {
 		}
 
 		flickrTips.xmlhttp.abort();
-		flickrTips.xmlhttp.open("GET",flickrTips.blogurl + "/wp-content/plugins/flickrtips/ajaxgeturl.php?" + flickrPost);
+		flickrTips.xmlhttp.open("GET",flickrTips.wpurl + "/wp-content/plugins/flickrtips/ajaxgeturl.php?" + flickrPost);
 		//flickrTips.xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded; charset=UTF-8");
 		flickrTips.xmlhttp.onreadystatechange=function() { flickrTips.flickrResponse(e,fotoPage); };
 		flickrTips.xmlhttp.send(flickrPost);

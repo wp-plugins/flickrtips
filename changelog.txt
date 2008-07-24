@@ -1,6 +1,3 @@
-== 1.4.1 released 2008-07-24
-
- * trying to get the version number to display right (instead of "devel") on the WordPress Plugins listing
 
 == 1.4 released 2008-07-24
 

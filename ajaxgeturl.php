@@ -10,7 +10,44 @@ function flickrRequest($method,$params)
 	if (is_array($params)) foreach ($params as $k => $v)
 		$req .= "&" . urlencode($k) . "=" . urlencode($v);
 
-	return @unserialize(file_get_contents($req));
+	if (ini_get('allow_url_fopen') > 0)
+		$result = file_get_contents($req);
+	else
+	{
+		$bits = parse_url($req);
+
+		$fh = fsockopen($bits['host'],80,$errno,$errmsg,10);
+
+		if (!$fh) die("Unable to connect to Flickr API. Error $errno: $errmsg");
+
+		$put = array(
+			"GET {$bits['path']}?{$bits['query']} HTTP/1.1",
+			"Host: {$bits['host']}",
+			"Connection: Close"
+		);
+
+		fwrite($fh,implode("\r\n",$put) . "\r\n\r\n");
+
+		$result = "";
+		$recording = false;
+		while (!feof($fh))
+		{
+			$line = fgets($fh);
+
+			if ($recording) $result .= $line;
+			else {
+
+				// in headers
+				if (!strlen(trim($line)))
+					$recording = true;
+
+			}
+		}
+
+		fclose($fh);
+	}
+
+	return @unserialize($result);
 }
 
 function flickrURL($p,$size='m')

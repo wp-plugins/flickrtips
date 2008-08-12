@@ -3,7 +3,7 @@
 Plugin Name: FlickrTips
 Plugin URI: 
 Description: Shows popup thumbnails of Flickr images on mouseover of links to Flickr
-Version: 1.4
+Version: 1.5
 Author: Chris Lewis
 Author URI: http://www.nomadicsiren.org/japan/
 */

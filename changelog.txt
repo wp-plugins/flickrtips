@@ -1,3 +1,7 @@
+== 1.6 released 2009-05-17
+
+ * added support for Flickr Group Pool URLs
+
 == 1.5 released 2008-08-12
 
  * new Flickr API connection code that doesn't depend on PHP allow_url_fopen setting

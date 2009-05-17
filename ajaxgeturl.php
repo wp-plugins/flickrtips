@@ -7,6 +7,9 @@ function flickrRequest($method,$params)
 
 	$req = "http://api.flickr.com/services/rest/?format=php_serial&api_key=$apikey&method=" . urlencode($method);
 
+	if (!$params['per_page'])
+		$params['per_page'] = $GLOBALS['max'];
+
 	if (is_array($params)) foreach ($params as $k => $v)
 		$req .= "&" . urlencode($k) . "=" . urlencode($v);
 
@@ -56,9 +59,8 @@ function flickrURL($p,$size='m')
 }
 
 $id = urldecode($_REQUEST['id']); // this takes care of high-byte chars
-$max = (int)$_REQUEST['max'];  if (!$max) $max = 6;
-
-if (!$id) die('no id');
+$max = (int)$_REQUEST['max'];  
+if (!$max) $max = 6;
 
 switch ($_REQUEST['type'])
 {
@@ -82,6 +84,51 @@ switch ($_REQUEST['type'])
 		}
 
 		break;
+
+	case "pool":
+
+		#cache Flickr group IDs to avoid slow lookup
+		$u = $_REQUEST['user'];
+
+		$c = @unserialize($_COOKIE['flickrTips_grouphash']);
+		if (!is_array($c)) $c = array();
+
+		if (!empty($c[$u])) $u = $c[$u];
+		else
+		{
+			$temp = flickrRequest('flickr.urls.lookupGroup',array('url' => "http://www.flickr.com/groups/{$_REQUEST['user']}/"));
+
+			if (empty($temp['group']['id']))
+				die("Error looking up Flickr group ID.");
+
+			$u = $c[$_REQUEST['user']] = $temp['group']['id'];
+
+			setcookie('flickrTips_grouphash',serialize($c),null,'/');
+		}
+
+		$req = array('group_id'=>$u);
+
+		if ($id === 'tags' and isset($_REQUEST['tag']))
+			$req['tags'] = $_REQUEST['tag'];
+		
+		$result = flickrRequest('flickr.groups.pools.getPhotos',$req);
+
+		if (!is_array($result['photos']['photo'])) 
+		{
+			var_dump($result);
+//			die('bad result');
+		}
+
+		shuffle($result['photos']['photo']);
+
+		$i = 0;
+		foreach ($result['photos']['photo'] as $p)
+		{
+			if (++$i > $max) break;
+			print flickrURL($p,"s") . "\n";
+		}
+
+		break;	
 
 	case "tag": case "tags":
 

@@ -4,7 +4,7 @@ var flickrTips = {
 	tilesX: 3,
 	tilesY: 2,
 	intervals: {},
-	flickrRE: new RegExp("http://(www\\.)?flickr\\.com/photos/([^/]+)/(sets|tags|\\d+)(/([^/]+))?"),
+	flickrRE: new RegExp("http://(?:www\\.)?flickr\\.com/(photos|groups)/([^/]+)/(sets|tags|pool|\\d+)?(?:/([^/]+))?(?:/([^/]+))?"),
 	plainImageRE: /\.(jpg|gif|png)(\?.*)?$/i,
 	xmlhttp: null,
 	fotos: new Object,
@@ -91,7 +91,7 @@ var flickrTips = {
 
 		if (!w || !h) return;
 
-		while (w > 256 || h > 256)
+		while (w > 320 || h > 320)
 		{
 			w /= 2;
 			h /= 2;
@@ -129,29 +129,34 @@ var flickrTips = {
 	flickrRequest: function(e,fotoPage) {
 
 		var matches = flickrTips.flickrRE.exec(fotoPage);
-	
-		var userID=matches[2];
+
+		var section = matches[1]
+		var userID = matches[2];
 		var fotoID, type;
-		
+
 		switch(matches[3]) {
-			case "sets":  case "collections":  case "tags":
+			case "sets":  case "collections":  case "tags": case "pool":
+
 				type=matches[3];
-				fotoID=matches[5];
+				fotoID=matches[4];
 				break;
 
 			default:
-				type='photos';
+				type = matches[1] == "groups" ? "pool" : "photos";
 				fotoID=matches[3];
 				break;
 		}
 
 		var flickrReq = {
 			max: flickrTips.tilesX*flickrTips.tilesY,
+			sect: matches[1],
+			user: userID,
 			type: type,
-			id: fotoID,
-			user: userID
+			id: fotoID ? fotoID : ""
 		};
 
+		if (type == 'pool' && fotoID == 'tags' && matches[5])
+			flickrReq.tag = matches[5];
 
 		var flickrPost = "";
 		var first=true;
